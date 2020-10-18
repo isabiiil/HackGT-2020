@@ -9,6 +9,8 @@ import dateutil.parser
 from PIL import Image
 from PIL import ImageOps
 import gc
+import datetime
+import time
 
 st.title('HackGT')
 
@@ -18,31 +20,37 @@ with open('tlogInfo.json') as f:
     d = json.load(f)
 df = pd.json_normalize(d['tlogs'])
 
-
-valsDf = pd.DataFrame({
-  'first column': ['2', '3', '4'],
-  'second column': [20, 30, 40]
-})
-print(df['touchPointId'])
 touch_point_id_options = df['touchPointId'].unique()
-#erying the touch_point ID 
-#===================================================================
 touch_point_id = st.sidebar.selectbox(
   'Which touchpoint ID would you like to see?',
   touch_point_id_options
 )
 
 touch_point_query_df = df[(df['touchPointId'] == touch_point_id)]
-
-print(touch_point_query_df['id'])
 #=====================================================================
 #Discount Amount timeline
 y = touch_point_query_df['tlog.totals.discountAmount.amount']
 x = touch_point_query_df['openDateTimeUtc.dateTime']
-discount = pd.DataFrame(y, x)
+time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.values ] 
 
-st.line_chart(touch_point_query_df)
-st.line_chart(discount)
+print(time)
+print('Xes')
+print(x.values)
+print("Ys")
+print(y)
+
+
+df = pd.DataFrame({
+  'date': time,
+  'discount ammount': y.values
+})
+
+df = df.rename(columns={'date':'index'}).set_index('index')
+
+
+st.line_chart(df)
+
+# st.line_chart(discount)
 # # plt.ylabel('Discount Amount ($)')
 # # plt.xlabel('Time')
 
