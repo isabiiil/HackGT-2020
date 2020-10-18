@@ -16,9 +16,9 @@ from sklearn.linear_model import LinearRegression
 
 
 
-st.title('From HackGT To Small Business')
+st.title('Small Business Demographics')
 '\n'
-st.title("Info by Touch Point ID") 
+st.title("Infographics for given Touch Point ID") 
 #load json object
 print("###################################### NEW LINE ========================")
 with open('tlogInfo.json') as f:
@@ -65,7 +65,7 @@ data = pd.DataFrame({
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
-st.header("Discount Amount Line Plot")
+st.header("Discounts provided over Time")
 st.line_chart(data)
 # selected 
 'Current Touch Point ID:', touch_point_id
@@ -79,13 +79,13 @@ Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for dat
 print(Y_pred)
 data = pd.DataFrame({
   'date': time,
-  'Grand Amount $': y.values,
-  "linear regression": Y_pred
+  'Purchase Amount($)': y.values,
+  "Regression curve": Y_pred
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
 
-st.header("Grand Amount Line Plot")
+st.header("Transaction Amounts over Time")
 st.line_chart(data) 
 # selected 
 'Current Touch Point ID:', touch_point_id
@@ -99,7 +99,7 @@ df_prod = pd.io.json.json_normalize(np.hstack(touch_point_query_df['tlog.items']
 # print(dir(ax))
 # st.pyplot(fig)
 # print(df_prod['productName'].value_counts())
-st.header("Items Popularity at a Touchpoint ID")
+st.header("Items Purchases at the given Touchpoint ID")
 features = np.array(['feature 1', 'feature 2', 'feature 3'])
 features_importances = np.array([.5, .25, .4])
 products = df_prod['productName']
@@ -121,8 +121,8 @@ st.write("", "", chart_v1)
 # location_id = input("Enter the location id: ") 
 # print(location_id)
 
-st.title("Info by Location ID")
-st.header("Discount Amount Line Plot") 
+st.title("Infographics for given Location ID")
+st.header("Discounts given over time") 
 # sidebar for Location ID
 location_id_options = df['tlog.location.locationId'].unique()
 location_id = st.sidebar.selectbox(
@@ -141,7 +141,7 @@ time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.val
 
 data = pd.DataFrame({
   'date': time,
-  'Discount Amount $': y.values
+  'Discount Amount($)': y.values
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
@@ -151,7 +151,7 @@ st.line_chart(data)
 
 # #============================================================
 # #Spending Amount timeline
-st.header("Grand Amount Line Plot")
+st.header("Transaction Amounts over Time")
 y = location_query_df['tlog.totals.grandAmount.amount']
 
 linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
@@ -159,8 +159,8 @@ Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for dat
 print(Y_pred)
 data = pd.DataFrame({
   'date': time,
-  'Grand Amount $': y.values,
-  "Linear Regression":Y_pred
+  'Transaction Amount($)': y.values,
+  "Regression Curve":Y_pred
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
@@ -176,7 +176,7 @@ df_prod = pd.io.json.json_normalize(np.hstack(location_query_df['tlog.items']))
 # x = df_prod['productName']
 # x.value_counts().plot(ax=ax, kind='bar')
 # plt.show()
-st.header("Items Popularity at a Location ID")
+st.header("Items Purchases at a Location ID")
 features = np.array(['feature 1', 'feature 2', 'feature 3'])
 features_importances = np.array([.5, .25, .4])
 products = df_prod['productName']
