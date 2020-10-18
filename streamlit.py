@@ -13,6 +13,7 @@ import datetime
 import time
 import altair as alt
 from sklearn.linear_model import LinearRegression
+import pytz
 
 
 
@@ -56,7 +57,7 @@ y = touch_point_query_df['tlog.totals.discountAmount.amount']
 
 x = touch_point_query_df['openDateTimeUtc.dateTime']
 
-time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.values ]
+time = [ pytz.utc.localize(datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ')) for date in x.values ]
 
 # print(time)
 data = pd.DataFrame({
@@ -76,7 +77,7 @@ y = touch_point_query_df['tlog.totals.grandAmount.amount']
 linear_regressor = LinearRegression()  # create object for the class
 linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
 Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1))
-print(Y_pred)
+
 data = pd.DataFrame({
   'date': time,
   'Purchase Amount($)': y.values,
@@ -137,8 +138,9 @@ location_query_df = df[(df['tlog.location.locationId'] == location_id)]
 # #Discount Amount timeline
 y = location_query_df['tlog.totals.discountAmount.amount']
 x = (location_query_df['openDateTimeUtc.dateTime'])
-time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.values ]
-
+time = [ pytz.utc.localize(datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ')) for date in x.values ]
+# time[-1].tzinfo = 'EST'
+print((time[0].strftime("%z")))
 data = pd.DataFrame({
   'date': time,
   'Discount Amount($)': y.values
@@ -156,7 +158,7 @@ y = location_query_df['tlog.totals.grandAmount.amount']
 
 linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
 Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1))
-print(Y_pred)
+
 data = pd.DataFrame({
   'date': time,
   'Transaction Amount($)': y.values,
