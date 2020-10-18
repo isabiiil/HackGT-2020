@@ -21,7 +21,7 @@ st.title('From HackGT To Small Business')
 st.title("Info by Touch Point ID") 
 #load json object
 print("###################################### NEW LINE ========================")
-with open('tlogInfo.json') as f:
+with open('tlogInfo2.json') as f:
     d = json.load(f)
 df = pd.json_normalize(d['tlogs'])
 
