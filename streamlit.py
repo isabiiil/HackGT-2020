@@ -15,11 +15,14 @@ import time
 st.title('HackGT')
 
 #load json object
-print("######################################NEW LINE========================")
+print("###################################### NEW LINE ========================")
 with open('tlogInfo.json') as f:
     d = json.load(f)
 df = pd.json_normalize(d['tlogs'])
 
+
+
+# =========== Discount amounts at various touch point locations ==========
 touch_point_id_options = df['touchPointId'].unique()
 touch_point_id = st.sidebar.selectbox(
   'Which touchpoint ID would you like to see?',
@@ -32,37 +35,27 @@ touch_point_query_df = df[(df['touchPointId'] == touch_point_id)]
 y = touch_point_query_df['tlog.totals.discountAmount.amount']
 x = touch_point_query_df['openDateTimeUtc.dateTime']
 time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.values ] 
-
 print(time)
-print('Xes')
-print(x.values)
-print("Ys")
-print(y)
-
-
 df = pd.DataFrame({
   'date': time,
-  'discount ammount': y.values
+  'Discount Ammount $': y.values
 })
 
 df = df.rename(columns={'date':'index'}).set_index('index')
-
-
 st.line_chart(df)
 
-# st.line_chart(discount)
-# # plt.ylabel('Discount Amount ($)')
-# # plt.xlabel('Time')
-
-# # fig1 = plt.figure(1)
-# # scatter = plt.plot(x, y, marker = 'o', alpha = 0.8)
-# # plt.show()
-# # plt.cla()
-# # plt.close()
 # #============================================================
 # #Spending Amount timeline
-# y = touch_point_query_df['tlog.totals.grandAmount.amount']
-# x = (touch_point_query_df['openDateTimeUtc.dateTime'])
+y = touch_point_query_df['tlog.totals.grandAmount.amount']
+df = pd.DataFrame({
+  'date': time,
+  'Grand Ammount $': y.values
+})
+
+df = df.rename(columns={'date':'index'}).set_index('index')
+st.line_chart(df) 
+
+
 # plt.ylabel('Spending Amount ($)')
 # plt.xlabel('Time')
 # fig1 = plt.figure(1)
