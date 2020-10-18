@@ -16,7 +16,7 @@ from sklearn.linear_model import LinearRegression
 
 
 
-st.title('Small Business Demographics')
+st.title('PreDemo (Prediction Demographics)')
 '\n'
 st.title("Infographics for given Touch Point ID") 
 #load json object
