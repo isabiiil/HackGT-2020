@@ -11,6 +11,7 @@ from PIL import ImageOps
 import gc
 import datetime
 import time
+import altair as alt
 
 st.title('HackGT')
 
@@ -56,18 +57,28 @@ df = df.rename(columns={'date':'index'}).set_index('index')
 st.line_chart(df) 
 
 
-# plt.ylabel('Spending Amount ($)')
-# plt.xlabel('Time')
-# fig1 = plt.figure(1)
-# scatter = plt.plot(x, y, marker = 'o', alpha = 0.8)
-# plt.show()
-# plt.cla()
-# plt.close()
+
 # #====================================================================
-# #Productwise Sale at a particular Point of Contact
-# df_prod = pd.io.json.json_normalize(np.hstack(touch_point_query_df['tlog.items']))
-# print(df_prod['productName'])
+#Productwise Sale at a particular Point of Contact
+df_prod = pd.io.json.json_normalize(np.hstack(touch_point_query_df['tlog.items']))
+# print(df_prod['productName'].values)
 # fig, ax = plt.subplots()
+# ax.hist(df_prod['productName'].values, bins = len(df_prod['productName'].values))
+# print(dir(ax))
+# st.pyplot(fig)
+# print(df_prod['productName'].value_counts())
+features = np.array(['feature 1', 'feature 2', 'feature 3'])
+features_importances = np.array([.5, .25, .4])
+df = df_prod['productName']
+print()
+chart_data = pd.DataFrame()
+chart_data['Items'] = np.array(df.value_counts().index)
+chart_data['Frequency'] = np.array(df_prod['productName'].value_counts().values)
+
+chart_v1 = alt.Chart(chart_data).mark_bar().encode(
+x='Items',
+y='Frequency')
+st.write("", "", chart_v1)
 # x = df_prod['productName']
 # x.value_counts().plot(ax=ax, kind='bar')
 # plt.show()
