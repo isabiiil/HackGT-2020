@@ -61,11 +61,11 @@ time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.val
 # print(time)
 data = pd.DataFrame({
   'date': time,
-  'Discount Ammount $': y.values
+  'Discount Amount $': y.values
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
-st.header("Discount Ammount Line Plot")
+st.header("Discount Amount Line Plot")
 st.line_chart(data)
 # selected 
 'Current Touch Point ID:', touch_point_id
@@ -79,13 +79,13 @@ Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for dat
 print(Y_pred)
 data = pd.DataFrame({
   'date': time,
-  'Grand Ammount $': y.values,
+  'Grand Amount $': y.values,
   "linear regression": Y_pred
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
 
-st.header("Grand Ammount Line Plot")
+st.header("Grand Amount Line Plot")
 st.line_chart(data) 
 # selected 
 'Current Touch Point ID:', touch_point_id
@@ -122,7 +122,7 @@ st.write("", "", chart_v1)
 # print(location_id)
 
 st.title("Info by Location ID")
-st.header("Discount Ammount Line Plot") 
+st.header("Discount Amount Line Plot") 
 # sidebar for Location ID
 location_id_options = df['tlog.location.locationId'].unique()
 location_id = st.sidebar.selectbox(
@@ -141,7 +141,7 @@ time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.val
 
 data = pd.DataFrame({
   'date': time,
-  'Discount Ammount $': y.values
+  'Discount Amount $': y.values
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
