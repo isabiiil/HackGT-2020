@@ -16,8 +16,9 @@ from sklearn.linear_model import LinearRegression
 
 
 
-st.title('HackGT')
-st.title("Info by Touch Point ID")
+st.title('From HackGT To Small Business')
+'\n'
+st.title("Info by Touch Point ID") 
 #load json object
 print("###################################### NEW LINE ========================")
 with open('tlogInfo.json') as f:
@@ -27,12 +28,26 @@ df = pd.json_normalize(d['tlogs'])
 
 
 # =========== Discount amounts at various touch point locations ==========
-st.header("Discount Ammount Line Plot")
+
 touch_point_id_options = df['touchPointId'].unique()
 touch_point_id = st.sidebar.selectbox(
   'Which touchpoint ID would you like to see?',
   touch_point_id_options
 )
+###############
+# setting up columns
+# >>> col1, col2, col3 = st.beta_columns(3)
+# >>>
+# >>> with col1:
+# ...    st.header("A cat")
+# ...    st.image("https://static.streamlit.io/examples/cat.jpg", use_column_width=True)
+# ...
+# >>> with col2:
+# ...    st.header("A dog")
+# ...    st.image("https://static.streamlit.io/examples/dog.jpg", use_column_width=True)
+col1, col2 = st.beta_columns(2)
+
+
 
 touch_point_query_df = df[(df['touchPointId'] == touch_point_id)]
 #=====================================================================
@@ -50,11 +65,13 @@ data = pd.DataFrame({
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
+st.header("Discount Ammount Line Plot")
 st.line_chart(data)
-
+# selected 
+'Current Touch Point ID:', touch_point_id
 # #============================================================
 # #Spending Amount timeline
-st.header("Grand Ammount Line Plot")
+
 y = touch_point_query_df['tlog.totals.grandAmount.amount']
 linear_regressor = LinearRegression()  # create object for the class
 linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
@@ -67,9 +84,11 @@ data = pd.DataFrame({
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
+
+st.header("Grand Ammount Line Plot")
 st.line_chart(data) 
-
-
+# selected 
+'Current Touch Point ID:', touch_point_id
 
 # #====================================================================
 #Productwise Sale at a particular Point of Contact
@@ -89,6 +108,7 @@ chart_data = pd.DataFrame()
 chart_data['Items'] = np.array(products.value_counts().index)
 chart_data['Frequency'] = np.array(df_prod['productName'].value_counts().values)
 
+chart_data
 chart_v1 = alt.Chart(chart_data).mark_bar().encode(
 x='Items',
 y='Frequency')
@@ -102,7 +122,7 @@ st.write("", "", chart_v1)
 # print(location_id)
 
 st.title("Info by Location ID")
-st.header("Discount Ammount Line Plot")
+st.header("Discount Ammount Line Plot") 
 # sidebar for Location ID
 location_id_options = df['tlog.location.locationId'].unique()
 location_id = st.sidebar.selectbox(
@@ -126,10 +146,12 @@ data = pd.DataFrame({
 
 data = data.rename(columns={'date':'index'}).set_index('index')
 st.line_chart(data)
+# selected 
+'Current Location ID:', location_id
 
 # #============================================================
 # #Spending Amount timeline
-st.header("Grand Ammount Line Plot")
+st.header("Grand Amount Line Plot")
 y = location_query_df['tlog.totals.grandAmount.amount']
 
 linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
@@ -137,14 +159,15 @@ Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for dat
 print(Y_pred)
 data = pd.DataFrame({
   'date': time,
-  'Grand Ammount $': y.values,
+  'Grand Amount $': y.values,
   "Linear Regression":Y_pred
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
 st.line_chart(data) 
 
-
+# selected 
+'Current Location ID:', location_id
 # #============================================================
 # #Productwise Sale at a particular location
 df_prod = pd.io.json.json_normalize(np.hstack(location_query_df['tlog.items']))
@@ -161,7 +184,7 @@ products = df_prod['productName']
 chart_data = pd.DataFrame()
 chart_data['Items'] = np.array(products.value_counts().index)
 chart_data['Frequency'] = np.array(df_prod['productName'].value_counts().values)
-
+chart_data
 chart_v1 = alt.Chart(chart_data).mark_bar().encode(
 x='Items',
 y='Frequency')
