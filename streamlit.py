@@ -43,10 +43,6 @@ x = touch_point_query_df['openDateTimeUtc.dateTime']
 
 time = [ datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ') for date in x.values ]
 
-linear_regressor = LinearRegression()  # create object for the class
-linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
-Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1))
-print(Y_pred)
 # print(time)
 data = pd.DataFrame({
   'date': time,
@@ -60,9 +56,14 @@ st.line_chart(data)
 # #Spending Amount timeline
 st.header("Grand Ammount Line Plot")
 y = touch_point_query_df['tlog.totals.grandAmount.amount']
+linear_regressor = LinearRegression()  # create object for the class
+linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
+Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1))
+print(Y_pred)
 data = pd.DataFrame({
   'date': time,
-  'Grand Ammount $': y.values
+  'Grand Ammount $': y.values,
+  "linear regression": Y_pred
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
@@ -130,9 +131,14 @@ st.line_chart(data)
 # #Spending Amount timeline
 st.header("Grand Ammount Line Plot")
 y = location_query_df['tlog.totals.grandAmount.amount']
+
+linear_regressor.fit(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1), y)  # perform linear regression
+Y_pred = linear_regressor.predict(np.array([int(date.strftime('%Y%m%d')) for date in time]).reshape(-1,1))
+print(Y_pred)
 data = pd.DataFrame({
   'date': time,
-  'Grand Ammount $': y.values
+  'Grand Ammount $': y.values,
+  "Linear Regression":Y_pred
 })
 
 data = data.rename(columns={'date':'index'}).set_index('index')
