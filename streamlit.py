@@ -25,7 +25,7 @@ valsDf = pd.DataFrame({
 })
 print(df['touchPointId'])
 touch_point_id_options = df['touchPointId'].unique()
-#erying the touch_point ID
+#erying the touch_point ID 
 #===================================================================
 touch_point_id = st.sidebar.selectbox(
   'Which touchpoint ID would you like to see?',
